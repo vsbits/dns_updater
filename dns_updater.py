@@ -28,17 +28,17 @@ def main(
         id: str
 ):
     logging.info("Checking for IP changes")
-    
+
     # Get cached IP
     try:
         with open(_CACHE_FILE) as file:
             cached_ip = file.read().strip()
-    except FileNotFoundError as e:
+    except FileNotFoundError:
         logging.warning(
             f"Failed to locate cache file '{_CACHE_FILE}'",
         )
         cached_ip = None
-        
+
         try:
             _create_cache_file()
         except Exception as e:
@@ -56,7 +56,7 @@ def main(
     if current_ip == cached_ip:
         logging.info("IP unchanged")
         return
-    
+
     logging.info(f"Current IP is {current_ip}")
 
     # Update to cloudflare DNS server
@@ -64,18 +64,30 @@ def main(
         update_dns(tk, current_ip, name, proxied, rec_type, zone, id)
     except ConnectionError:
         logging.error("Failed to authenticate to DNS server")
-    except Exception as e:
+    except Exception:
         logging.error("Unexpected error when updating DNS", exc_info=True)
 
-    logging.info(f"DNS updated")
-    
+    logging.info("DNS updated")
+
     # Cache current IP
     try:
         _update_cache(current_ip)
-    except Exception as e:
-        logging.error(f"Failed to update local cache")
-    logging.info(f"Local cache updated")
+    except Exception:
+        logging.error("Failed to update local cache")
+    logging.info("Local cache updated")
 
+
+def _is_ip(content: str) -> bool:
+    """
+Checks if a string is a valid IP without extra characters
+
+content: string to be checked
+"""
+    if "\n" in content:
+        return False
+
+    ip_pattern = re.compile("^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}$")
+    return bool(re.match(ip_pattern, content))
 
 
 def get_ip(url: str) -> str:
@@ -85,21 +97,21 @@ the IP value in the response body)
 
 url: API url
 """
-    ip_pattern = re.compile("[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}")
 
     r = requests.get(url)
 
     if r.status_code != 200:
         raise ConnectionError("Error connecting to server")
-    
+
     ip = r.text.strip()
-    if re.match(ip_pattern, ip) is None:
-        raise ValueError("Response from server was not an IP")
-    
-    return ip
+
+    if _is_ip(ip):
+        return ip
+
+    raise ValueError("Response from server was not an IP")
 
 
-def _create_cache_file(cache_file: str=_CACHE_FILE):
+def _create_cache_file(cache_file: str = _CACHE_FILE):
     """
 Creates a file to store the IP value
 
@@ -109,7 +121,7 @@ cache_file: filepath
         pass
 
 
-def _update_cache(new_ip: str, cache_file: str=_CACHE_FILE):
+def _update_cache(new_ip: str, cache_file: str = _CACHE_FILE):
     """
 Saves the `new_ip` value to cache
 
@@ -128,7 +140,7 @@ def update_dns(
     rec_type: str,
     zone: str,
     id: str,
-):  
+):
     """
 Updates the Cloudflare DNS record with the new IP
 
@@ -156,7 +168,7 @@ id: record ID
 
     if r.status_code != 200:
         raise ConnectionError
-    
+
     json_response = json.loads(r.text)
     if not json_response.get("success"):
         errors = json_response.get("errors")
