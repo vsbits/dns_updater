@@ -33,7 +33,7 @@ def main(
     try:
         with open(_CACHE_FILE) as file:
             cached_ip = file.read().strip()
-    except FileNotFoundError as e:
+    except FileNotFoundError:
         logging.warning(
             f"Failed to locate cache file '{_CACHE_FILE}'",
         )
@@ -64,17 +64,17 @@ def main(
         update_dns(tk, current_ip, name, proxied, rec_type, zone, id)
     except ConnectionError:
         logging.error("Failed to authenticate to DNS server")
-    except Exception as e:
+    except Exception:
         logging.error("Unexpected error when updating DNS", exc_info=True)
 
-    logging.info(f"DNS updated")
+    logging.info("DNS updated")
 
     # Cache current IP
     try:
         _update_cache(current_ip)
-    except Exception as e:
-        logging.error(f"Failed to update local cache")
-    logging.info(f"Local cache updated")
+    except Exception:
+        logging.error("Failed to update local cache")
+    logging.info("Local cache updated")
 
 
 
