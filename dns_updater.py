@@ -77,6 +77,18 @@ def main(
     logging.info("Local cache updated")
 
 
+def _is_ip(content: str) -> bool:
+    """
+Checks if a string is a valid IP without extra characters
+
+content: string to be checked
+"""
+    if "\n" in content:
+        return False
+
+    ip_pattern = re.compile("^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}$")
+    return bool(re.match(ip_pattern, content))
+
 
 def get_ip(url: str) -> str:
     """
@@ -85,7 +97,6 @@ the IP value in the response body)
 
 url: API url
 """
-    ip_pattern = re.compile("[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}")
 
     r = requests.get(url)
 
@@ -93,10 +104,11 @@ url: API url
         raise ConnectionError("Error connecting to server")
 
     ip = r.text.strip()
-    if re.match(ip_pattern, ip) is None:
-        raise ValueError("Response from server was not an IP")
-    
-    return ip
+
+    if _is_ip(ip):
+        return ip
+
+    raise ValueError("Response from server was not an IP")
 
 
 def _create_cache_file(cache_file: str = _CACHE_FILE):
