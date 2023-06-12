@@ -28,7 +28,7 @@ def main(
         id: str
 ):
     logging.info("Checking for IP changes")
-    
+
     # Get cached IP
     try:
         with open(_CACHE_FILE) as file:
@@ -38,7 +38,7 @@ def main(
             f"Failed to locate cache file '{_CACHE_FILE}'",
         )
         cached_ip = None
-        
+
         try:
             _create_cache_file()
         except Exception as e:
@@ -56,7 +56,7 @@ def main(
     if current_ip == cached_ip:
         logging.info("IP unchanged")
         return
-    
+
     logging.info(f"Current IP is {current_ip}")
 
     # Update to cloudflare DNS server
@@ -68,7 +68,7 @@ def main(
         logging.error("Unexpected error when updating DNS", exc_info=True)
 
     logging.info(f"DNS updated")
-    
+
     # Cache current IP
     try:
         _update_cache(current_ip)
@@ -91,7 +91,7 @@ url: API url
 
     if r.status_code != 200:
         raise ConnectionError("Error connecting to server")
-    
+
     ip = r.text.strip()
     if re.match(ip_pattern, ip) is None:
         raise ValueError("Response from server was not an IP")
@@ -99,7 +99,7 @@ url: API url
     return ip
 
 
-def _create_cache_file(cache_file: str=_CACHE_FILE):
+def _create_cache_file(cache_file: str = _CACHE_FILE):
     """
 Creates a file to store the IP value
 
@@ -109,7 +109,7 @@ cache_file: filepath
         pass
 
 
-def _update_cache(new_ip: str, cache_file: str=_CACHE_FILE):
+def _update_cache(new_ip: str, cache_file: str = _CACHE_FILE):
     """
 Saves the `new_ip` value to cache
 
@@ -128,7 +128,7 @@ def update_dns(
     rec_type: str,
     zone: str,
     id: str,
-):  
+):
     """
 Updates the Cloudflare DNS record with the new IP
 
@@ -156,7 +156,7 @@ id: record ID
 
     if r.status_code != 200:
         raise ConnectionError
-    
+
     json_response = json.loads(r.text)
     if not json_response.get("success"):
         errors = json_response.get("errors")
