@@ -1,17 +1,19 @@
 import logging
 import sys
-from .config import CONFIG
+from .config import generate_config
 from .core import update_dns, get_ip
 from .cache import Cache
 
-logging.basicConfig(
-    level=logging.INFO,
-    filename=CONFIG["LOGGING_FILE"],
-    format="%(asctime)s - %(levelname)s - %(message)s"
-)
-
 
 def main():
+    CONFIG = generate_config()
+
+    logging.basicConfig(
+        level=logging.INFO,
+        filename=CONFIG["LOGGING_FILE"],
+        format="%(asctime)s - %(levelname)s - %(message)s"
+    )
+
     logging.info("Checking for IP changes")
     cache_file = CONFIG["CACHE_FILE"]
     cache = Cache()
