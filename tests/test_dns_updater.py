@@ -1,4 +1,4 @@
-import dns_updater
+from dns_updater import dns_updater
 
 
 class TestCheckIP:
