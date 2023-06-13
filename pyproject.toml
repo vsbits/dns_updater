@@ -21,6 +21,8 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+[project.scripts]
+update_dns = "dns_updater.cli:main"
 
 [project.urls]
 "Homepage" = "https://github.com/vs-araujo/dns_updater"
