@@ -2,6 +2,7 @@ import requests
 import re
 import logging
 import json
+import sys
 from dotenv import load_dotenv
 from os import getenv
 
@@ -43,7 +44,7 @@ def dns_updater(
             _create_cache_file()
         except Exception as e:
             logging.error(e, exc_info=True)
-            return
+            sys.exit(1)
         logging.info("File successfully created")
 
     # Fetch Current IP
@@ -51,7 +52,7 @@ def dns_updater(
         current_ip = get_ip(ip_url)
     except (ConnectionError, ValueError) as e:
         logging.error(e)
-        return
+        sys.exit(1)
 
     if current_ip == cached_ip:
         logging.info("IP unchanged")
@@ -62,10 +63,12 @@ def dns_updater(
     # Update to cloudflare DNS server
     try:
         update_dns(tk, current_ip, name, proxied, rec_type, zone, id)
-    except ConnectionError:
-        logging.error("Failed to authenticate to DNS server")
-    except Exception:
-        logging.error("Unexpected error when updating DNS", exc_info=True)
+    except Exception as e:
+        if isinstance(e, ConnectionError):
+            logging.error("Failed to authenticate to DNS server")
+        else:
+            logging.error("Unexpected error when updating DNS", exc_info=True)
+        sys.exit(1)
 
     logging.info("DNS updated")
 
@@ -74,7 +77,10 @@ def dns_updater(
         _update_cache(current_ip)
     except Exception:
         logging.error("Failed to update local cache")
+        sys.exit(1)
     logging.info("Local cache updated")
+
+    sys.exit(0)
 
 
 def _is_ip(content: str) -> bool:
