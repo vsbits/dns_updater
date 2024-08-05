@@ -2,7 +2,7 @@ import logging
 import sys
 from .config import generate_config
 from .core import update_dns, get_ip
-from .cache import Cache
+from .cache import load_cache, create_cache
 
 
 def main():
@@ -16,18 +16,17 @@ def main():
 
     logging.info("Checking for IP changes")
     cache_file = CONFIG["CACHE_FILE"]
-    cache = Cache()
 
     # Get cached IP
     try:
-        cache.load(cache_file)
+        cache = load_cache(cache_file)
     except FileNotFoundError:
         logging.warning(
             f"Failed to locate cache file '{cache_file}'",
         )
 
         try:
-            cache.new(cache_file)
+            create_cache(cache_file)
         except Exception as e:
             logging.error(e, exc_info=True)
             sys.exit(1)

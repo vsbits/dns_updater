@@ -40,7 +40,7 @@ url: API url
     if is_valid_ip(ip):
         return ip
 
-    raise ValueError("Response from server was not an IP")
+    raise ValueError("Response from server was not a valid IP")
 
 
 def update_dns(
