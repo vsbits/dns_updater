@@ -22,11 +22,6 @@ class TestCheckIP:
 
 
 class TestGetIp:
-    @pytest.fixture
-    def mocker(self, mocker):
-        """Fixture to provide mocker for each test"""
-        return mocker
-
     def test_get_ip_success(self, mocker):
         """Test get_ip function with a successful response"""
         mock_get = mocker.patch('requests.get')
@@ -64,11 +59,6 @@ class TestGetIp:
 
 
 class TestUpdateDns:
-    @pytest.fixture
-    def mocker(self, mocker):
-        """Fixture to provide mocker for each test"""
-        return mocker
-
     def test_update_dns_success(self, mocker):
         """Test update_dns function with a successful response"""
         # Mock successful response

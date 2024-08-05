@@ -8,6 +8,7 @@ from dns_updater.cache import (
 class TestCache:
     @pytest.fixture(autouse=True)
     def setup_and_teardown(self):
+        """Fixture to provide a temp text file to be used as cache"""
         self.filepath = '.test_cache_file.temp'
 
         if os.path.exists(self.filepath):
