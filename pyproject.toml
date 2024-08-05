@@ -6,7 +6,7 @@ authors = [
 ]
 description = "Script to update a DNS record on Cloudflare."
 readme = "README.md"
-dynamic = ["dependencies"]
+dynamic = ["dependencies", "optional-dependencies"]
 requires-python = ">=3.10"
 
 [build-system]
@@ -16,8 +16,8 @@ build-backend = "hatchling.build"
 [tool.hatch.metadata.hooks.requirements_txt]
 files = ["requirements.txt"]
 
-[project.optional-dependencies]
-tests = ["flake8", "pytest", "pytest-mock", "codecov", "pytest-cov"]
+[tool.hatch.metadata.hooks.requirements_txt.optional-dependencies]
+tests = ["requirements-tests.txt"]
 
 [project.scripts]
 update_dns = "dns_updater.cli:main"
