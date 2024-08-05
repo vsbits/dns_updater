@@ -1,5 +1,7 @@
 # DNS updater
 
+[![codecov](https://codecov.io/gh/vsbits/dns_updater/graph/badge.svg?token=9ZDDRR0ZK7)](https://codecov.io/gh/vsbits/dns_updater)
+
 Script to update a DNS record on Cloudflare.
 
 ## Instalation
