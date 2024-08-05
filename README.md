@@ -4,19 +4,16 @@ Script to update a DNS record on Cloudflare.
 
 ## Instalation
 
-Just clone this repository and run `pip install`:
+Run the following code to install:
 
 ```
-git clone https://github.com/vs-araujo/dns_updater && \
-cd dns_updater && \
-pip install .
+pip install git+https://github.com/vsbits/dns_updater.git@main
 ```
 
 After installation, you should have access to the `update_dns` command through
 your shell.
 
-The script uses the following environment variables, some of them are required for it to run.
-You can either `export` them or use a `.env` file:
+The script uses the following environment variables, some of them are required for it to run:
 
 ### `LOGGING_FILE` [Optional]
 Path to the script log file. Default is `dns_updater.log`.
