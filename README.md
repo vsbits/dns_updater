@@ -1,5 +1,6 @@
 # DNS updater
 
+[![tests](https://github.com/vsbits/dns_updater/actions/workflows/tests.yml/badge.svg)](https://github.com/vsbits/dns_updater/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/vsbits/dns_updater/graph/badge.svg?token=9ZDDRR0ZK7)](https://codecov.io/gh/vsbits/dns_updater)
 
 Script to update a DNS record on Cloudflare.
