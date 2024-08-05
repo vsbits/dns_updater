@@ -40,7 +40,7 @@ url: API url
     if is_valid_ip(ip):
         return ip
 
-    raise ValueError("Response from server was not an IP")
+    raise ValueError("Response from server was not a valid IP")
 
 
 def update_dns(
@@ -53,16 +53,16 @@ def update_dns(
     id: str,
 ):
     """
-Updates the Cloudflare DNS record with the new IP
+    Updates the Cloudflare DNS record with the new IP
 
-tk: API token
-new_ip: IP address
-name: record name,
-proxied: proxied by Cloudflare,
-rec_type: record type,
-zone: DNS zone ID
-id: record ID
-"""
+    tk: API token
+    new_ip: IP address
+    name: record name,
+    proxied: proxied by Cloudflare,
+    rec_type: record type,
+    zone: DNS zone ID
+    id: record ID
+    """
     url = f"https://api.cloudflare.com/client/v4/zones/{zone}/dns_records/{id}"
     headers = {
         "Content-Type": "application/json",
