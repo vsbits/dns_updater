@@ -16,6 +16,9 @@ build-backend = "hatchling.build"
 [tool.hatch.metadata.hooks.requirements_txt]
 files = ["requirements.txt"]
 
+[project.optional-dependencies]
+tests = ["flake8", "pytest", "pytest-mock", "codecov", "pytest-cov"]
+
 [project.scripts]
 update_dns = "dns_updater.cli:main"
 
