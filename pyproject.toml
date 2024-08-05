@@ -1,31 +1,26 @@
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "dns_updater"
 version = "0.1.0"
 authors = [
-  { name="Vítor dos Santos Araujo", email="vitor@vitoraraujo.dev" },
+  { name="Vítor dos Santos Araujo", email="vitoraraujo@tuta.com" },
 ]
 description = "Script to update a DNS record on Cloudflare."
 readme = "README.md"
+dynamic = ["dependencies"]
 requires-python = ">=3.10"
-dependencies = [
-  "requests",
-  "python-dotenv"
-]
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-]
+
+[build-system]
+requires = ["hatchling", "hatch-requirements-txt"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata.hooks.requirements_txt]
+files = ["requirements.txt"]
 
 [project.scripts]
 update_dns = "dns_updater.cli:main"
 
 [project.urls]
-"Homepage" = "https://github.com/vs-araujo/dns_updater"
+"Homepage" = "https://github.com/vsbits/dns_updater"
 
 [tool.pytest.ini_options]
 pythonpath = "src"
